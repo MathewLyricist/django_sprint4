@@ -1,16 +1,19 @@
+from typing import Any, Dict
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
+from django.db.models.query import QuerySet
+from django.http import Http404
 from django.http.response import HttpResponse
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils import timezone
 from django.views.generic import (
     CreateView, DeleteView, DetailView, ListView, UpdateView
 )
 
-from .forms import PostForm
-from .models import Post
+from .forms import CommentForm, PostForm
+from .models import Category, Comment, Post, User
 
 PAGINATE_COUNT: int = 10
 
