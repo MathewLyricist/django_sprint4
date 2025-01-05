@@ -1,18 +1,14 @@
-from django.views.generic import ListView, CreateView
-from django.views.generic import UpdateView, DeleteView, DetailView
+from django.views.generic import ListView, CreateView, UpdateView
 from django.shortcuts import get_object_or_404, redirect
 from django.http import Http404
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
 from django.utils import timezone
-
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count
 from django.urls import reverse_lazy, reverse
 
 from .forms import CommentForm, PostForm, UserProfileForm
 from .models import Post, Category, Comment
-
 
 class PostListView(ListView):
     model = Post
@@ -47,7 +43,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return reverse('blog:profile', args=[username])
 
 
-class PostUpdateView(UpdateView):
+class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     form_class = PostForm
     template_name = 'blog/create.html'
