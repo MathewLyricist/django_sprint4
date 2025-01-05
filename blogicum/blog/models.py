@@ -6,12 +6,10 @@ User = get_user_model()
 
 
 class PublishedModel(models.Model):
-    
     """
     Абстрактная модель.
     Добвляет для публикаций флаг и дату создания.
     """
-    
     is_published = models.BooleanField(
         default=True,
         verbose_name='Опубликовано',
