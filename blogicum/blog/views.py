@@ -1,8 +1,11 @@
-from django.views.generic import ListView, CreateView, UpdateView
+from django.views.generic import ListView, CreateView
+from django.views.generic import UpdateView, DeleteView, DetailView
 from django.shortcuts import get_object_or_404, redirect
 from django.http import Http404
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.utils import timezone
+
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count
 from django.urls import reverse_lazy, reverse
@@ -27,7 +30,6 @@ class PostListView(ListView):
 
         return queryset
 
-
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     form_class = PostForm
@@ -41,6 +43,45 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         username = self.object.author.username
         return reverse('blog:profile', args=[username])
+
+class PostUpdateView(UpdateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'blog/create.html'
+
+    def test_func(self):
+        self.object = self.get_object()
+        return (
+            self.request.user.is_authenticated
+            and self.object.author == self.request.user
+        )
+
+    def dispatch(self, request, *args, **kwargs):from django.views.generic import ListView, CreateView
+from django.views.generic import UpdateView, DeleteView, DetailView
+from django.shortcuts import get_object_or_404, redirect
+from django.http import Http404
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
+from django.utils import timezone
+
+from django.core.exceptions import PermissionDenied
+from django.db.models import Count
+from django.urls import reverse_lazy, reverse
+
+from .forms import CommentForm, PostForm, UserProfileForm
+from .models import Post, Category, Comment
+
+        if not self.test_func():
+            return redirect(reverse(
+                'blog:post_detail', kwargs={'post_id': self.kwargs['pk']}
+            ))
+        else:
+            return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse_lazy(
+            'blog:post_detail', kwargs={'post_id': self.object.pk}
+        )
 
 
 class PostUpdateView(LoginRequiredMixin, UpdateView):
