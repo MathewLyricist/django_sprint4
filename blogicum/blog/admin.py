@@ -1,62 +1,65 @@
 from django.contrib import admin
-from .models import Category, Location, Post
 
-# Установка отображения пустых значений в админке.
-admin.site.empty_value_display = 'Не задано'
+from .models import Category, Comment, Location, Post
 
 
-class PostInline(admin.TabularInline):
-    """
-    Определение Inline-класса, который используется
-    для создания встроенных форм для связанных объектов Post.
-    """
-
+class PostInLine(admin.TabularInline):
     model = Post
-    # Количество дополнительных форм для ввода.
     extra = 0
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    """Класс администрирования для модели Category."""
-
-    inlines = (
-        PostInline,
+    inlines = (PostInLine,)
+    list_display = (
+        'title',
+        'description',
+        'is_published',
     )
+    list_editable = ('is_published',)
+    search_fields = ('title',)
+
+
+class CommentAdmin(admin.ModelAdmin):
+    list_display = (
+        'created_at',
+        'text',
+        'author',
+        'is_published',
+    )
+    list_editable = ('is_published',)
+    list_filter = ('is_published',)
 
 
 class LocationAdmin(admin.ModelAdmin):
-    """Класс администрирования для модели Location."""
-
-    inlines = (
-        PostInline,
+    inlines = (PostInLine,)
+    list_display = (
+        'name',
+        'is_published',
     )
+    list_editable = ('is_published',)
+    search_fields = ('name',)
 
 
 class PostAdmin(admin.ModelAdmin):
-    """Класс администрирования для модели Post."""
-
     list_display = (
         'title',
-        'text',
         'pub_date',
+        'text',
         'author',
         'location',
         'category',
         'is_published',
-        'created_at'
     )
     list_editable = (
-        'author',
-        'location',
-        'category',
-        'is_published'
+        'is_published',
+        'pub_date',
     )
     search_fields = ('title',)
     list_filter = ('is_published',)
     list_display_links = ('title',)
 
 
-# Регистрация моделей в админке.
-admin.site.register(Post, PostAdmin)
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(Comment, CommentAdmin)
 admin.site.register(Location, LocationAdmin)
+admin.site.register(Post, PostAdmin)
