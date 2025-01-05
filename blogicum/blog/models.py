@@ -8,8 +8,9 @@ User = get_user_model()
 class PublishedModel(models.Model):
     """
     Абстрактная модель.
-    Добвляет для публикаций флаг и дату создания.
+    Добавляет для публикаций флаг и дату создания.
     """
+
     is_published = models.BooleanField(
         default=True,
         verbose_name='Опубликовано',
@@ -26,6 +27,7 @@ class PublishedModel(models.Model):
 
 class Location(PublishedModel):
     """Модель локации для публикаций."""
+
     name = models.CharField(
         max_length=256,
         verbose_name='Название места',
@@ -41,6 +43,7 @@ class Location(PublishedModel):
 
 class Category(PublishedModel):
     """Модель категории для публикаций."""
+
     title = models.CharField(
         max_length=256,
         verbose_name='Заголовок',
@@ -67,6 +70,7 @@ class Category(PublishedModel):
 
 class Post(PublishedModel):
     """Модель публикации."""
+
     title = models.CharField(
         max_length=256,
         verbose_name='Заголовок',
@@ -118,15 +122,14 @@ class Post(PublishedModel):
 
     def __str__(self) -> str:
         return (
-            f"""
-            {self.pub_date:%Y.%m.%d %H:%M} | {self.author}
-            : "{self.title[:25]}" {self.text[:50]}
-            """
+            f"{self.pub_date:%Y.%m.%d %H:%M} | {self.author}: "
+            f'"{self.title[:25]}" {self.text[:50]}'
         )
 
 
 class Comment(PublishedModel):
     """Модель комментария для публикации."""
+
     text = models.TextField(
         verbose_name='Текст комментария',
     )
@@ -137,6 +140,7 @@ class Comment(PublishedModel):
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
+
         related_name='comments',
     )
 
