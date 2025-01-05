@@ -13,6 +13,7 @@ from django.urls import reverse_lazy, reverse
 from .forms import CommentForm, PostForm, UserProfileForm
 from .models import Post, Category, Comment
 
+
 class PostListView(ListView):
     model = Post
     paginate_by = 10
