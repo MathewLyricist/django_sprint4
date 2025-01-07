@@ -18,7 +18,6 @@ class PostForm(forms.ModelForm):
             ),
         }
 
-
 class CommentForm(forms.ModelForm):
     """Форма для добавления комментариев."""
 
@@ -31,15 +30,9 @@ class CommentForm(forms.ModelForm):
             )
         }
 
-
-class CreateCommentForm(forms.ModelForm):
-    """Форма для создания комментария."""
+class CreatePostForm(forms.ModelForm):
+    """Форма для создания поста."""
 
     class Meta:
-        model = Comment
-        fields = ('text',)
-        widgets = {
-            'text': forms.Textarea(
-                attrs={'rows': '5'}
-            )
-        }
+        model = Post
+        fields = '__all__'  # или выберите конкретные поля для формы
