@@ -5,11 +5,13 @@ from django.views.generic.base import TemplateView
 
 class AboutView(TemplateView):
     """Возвращает страницу с описанием проекта."""
+    
     template_name = 'pages/about.html'
 
 
 class RulesView(TemplateView):
     """Возвращает страницу с правилами."""
+    
     template_name = 'pages/rules.html'
 
 
