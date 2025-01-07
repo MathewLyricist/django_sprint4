@@ -29,6 +29,5 @@ def page_not_found(request, exception) -> HttpResponse:
 
 def server_error(request, reason='') -> HttpResponse:
     """Рендер страницы для 500 ошибки."""
-
     template: str = 'pages/500.html'
     return render(request, template, status=500)
