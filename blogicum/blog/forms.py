@@ -1,4 +1,5 @@
 from django import forms
+from blog.forms import CreateCommentForm
 
 from .models import Comment, Post
 
