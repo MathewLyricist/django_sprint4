@@ -1,7 +1,6 @@
 from django import forms
 from .models import Comment, Post
 
-
 class PostForm(forms.ModelForm):
     """Форма для добавления постов."""
 
@@ -21,6 +20,19 @@ class PostForm(forms.ModelForm):
 
 class CommentForm(forms.ModelForm):
     """Форма для добавления комментариев."""
+
+    class Meta:
+        model = Comment
+        fields = ('text',)
+        widgets = {
+            'text': forms.Textarea(
+                attrs={'rows': '5'}
+            )
+        }
+
+
+class CreateCommentForm(forms.ModelForm):
+    """Форма для создания комментария."""
 
     class Meta:
         model = Comment
