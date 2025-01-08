@@ -16,8 +16,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'pages.apps.PagesConfig',
-    'blog.apps.BlogConfig',
-    'django_bootstrap5',
+    'blog.apps.BlogConfig'
 ]
 
 MIDDLEWARE = [
@@ -72,7 +71,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = 'ru-RU'
+LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = 'UTC'
 
@@ -89,12 +88,3 @@ STATICFILES_DIRS = [
 ]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-CSRF_FAILURE_VIEW = 'pages.views.csrf_failure'
-LOGIN_REDIRECT_URL = 'blog:index'
-MEDIA_ROOT = BASE_DIR / 'media'
-MEDIA_URL = 'media/'
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
-DEFAULT_FROM_EMAIL = 'from@example.com'
-TEMPLATES_DIR = BASE_DIR / 'templates'
