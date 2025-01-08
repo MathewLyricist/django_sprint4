@@ -1,39 +1,35 @@
-from django import forms  # type: ignore
-from django.contrib.auth import get_user_model  # type: ignore
+from django import forms
+from django.utils import timezone
 
 from .models import Comment, Post
 
-User = get_user_model()
 
-
-class PostForm(forms.ModelForm):
-    """Форма создания и редактирования публикации."""
+class CreatePostForm(forms.ModelForm):
+    pub_date = forms.DateTimeField(
+        initial=timezone.now,
+        required=True,
+        widget=forms.DateTimeInput(
+            attrs={
+                'type': 'datetime-local',
+            },
+            format='%Y-%m-%dT%H:%M',
+        ),
+    )
 
     class Meta:
         model = Post
-        exclude = ('author', 'comment_count', 'is_published')
-        widgets = {
-            'pub_date': forms.DateTimeInput(
-                format=('%d.%m.%Y %H:%M'),
-                attrs={'type': 'datetime'}),
-        }
+        fields = (
+            'title',
+            'image',
+            'text',
+            'pub_date',
+            'location',
+            'category',
+            'is_published',
+        )
 
 
-class CommentForm(forms.ModelForm):
-    """Форма создания и редактирования комментария."""
-
+class CreateCommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        exclude = ('author', 'post', 'is_published')
-
-
-class ProfileForm(forms.ModelForm):
-    """Форма создания и редактирования профиля."""
-
-    class Meta:
-        model = User
-        exclude = ('is_staff', 'groups',
-                   'user_permissions',
-                   'is_active', 'is_superuser',
-                   'last_login', 'date_joined',
-                   'username', 'password')
+        fields = ("text",)

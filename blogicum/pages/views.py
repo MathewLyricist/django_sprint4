@@ -1,14 +1,26 @@
-from django.shortcuts import render  # type: ignore[import-untyped]
-from django.http import HttpResponse  # type: ignore[import-untyped]
+from django.shortcuts import render
+from django.views.generic import TemplateView
 
 
-def about(request) -> HttpResponse:
-    """Описание проекта."""
-    template: str = 'pages/about.html'
-    return render(request, template)
+class AboutTemplateView(TemplateView):
+    template_name = 'pages/about.html'
 
 
-def rules(request) -> HttpResponse:
-    """Правила проекта."""
-    template: str = 'pages/rules.html'
-    return render(request, template)
+class RulesTemplateView(TemplateView):
+    template_name = 'pages/rules.html'
+
+
+def permission_denied(request, exception):
+    return render(request, 'pages/403.html', status=403)
+
+
+def csrf_failure(request, reason=''):
+    return render(request, 'pages/403csrf.html', status=403)
+
+
+def page_not_found(request, exception):
+    return render(request, 'pages/404.html', status=404)
+
+
+def server_error(request):
+    return render(request, 'pages/500.html', status=500)

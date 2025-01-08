@@ -1,16 +1,17 @@
-from django.contrib.auth.mixins import UserPassesTestMixin  # type: ignore
-from django.shortcuts import redirect  # type: ignore
+from django.urls import reverse
+
+from .models import Comment, Post
 
 
-class OnlyAuthorMixin(UserPassesTestMixin):
-    """Проверка на авторство."""
+class PostsEditMixin:
+    model = Post
+    template_name = 'blog/create.html'
 
-    def test_func(self):
-        """Проверка на авторство."""
-        object = self.get_object()
-        return object.author == self.request.user
 
-    def handle_no_permission(self):
-        """Перенаправляет неавторов."""
-        return redirect('blog:post_detail',
-                        post_id=self.kwargs.get('post_id'))
+class CommentEditMixin:
+    model = Comment
+    pk_url_kwarg = 'comment_pk'
+    template_name = 'blog/comment.html'
+
+    def get_success_url(self):
+        return reverse('blog:post_detail', args=[self.kwargs['post_id']])
