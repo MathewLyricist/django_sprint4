@@ -88,7 +88,6 @@ def post_with_published_location(
     image_file = ImageFile(img_io, name='temp_image.jpg')
     post = mixer.blend(
         'blog.Post',
-        is_published=True,
         location=published_location,
         category=published_category,
         author=user,

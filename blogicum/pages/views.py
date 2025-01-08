@@ -1,33 +1,30 @@
-from django.http import HttpResponse
-from django.shortcuts import render
-from django.views.generic.base import TemplateView
+from django.shortcuts import render  # type: ignore
+from django.http import HttpResponse  # type: ignore
+from django.views.generic import TemplateView  # type: ignore
 
 
-class AboutView(TemplateView):
-    """Возвращает страницу с описанием проекта."""
+class About(TemplateView):
+    """Описание проекта."""
 
-    template_name = 'pages/about.html'
-
-
-class RulesView(TemplateView):
-    """Возвращает страницу с правилами."""
-
-    template_name = 'pages/rules.html'
+    template_name: str = 'pages/about.html'
 
 
-def csrf_failure(request, reason='') -> HttpResponse:
-    """Рендер страницы для 403 ошибки."""
-    template: str = 'pages/403csrf.html'
-    return render(request, template, status=403)
+class Rules(TemplateView):
+    """Правила проекта."""
+
+    template_name: str = 'pages/rules.html'
 
 
 def page_not_found(request, exception) -> HttpResponse:
-    """Рендер страницы для 404 ошибки."""
-    template: str = 'pages/404.html'
-    return render(request, template, status=404)
+    """Ошибка 404: Страница не найдена."""
+    return render(request, 'pages/404.html', status=404)
 
 
-def server_error(request, reason='') -> HttpResponse:
-    """Рендер страницы для 500 ошибки."""
-    template: str = 'pages/500.html'
-    return render(request, template, status=500)
+def csrf_failure(request, reason='') -> HttpResponse:
+    """Ошибка 403: Ошибка CSRF токена."""
+    return render(request, 'pages/403csrf.html', status=403)
+
+
+def server_failure(request) -> HttpResponse:
+    """Ошибка 500: Ошибка сервера."""
+    return render(request, 'pages/500.html', status=500)

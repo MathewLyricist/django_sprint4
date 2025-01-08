@@ -1,0 +1,354 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-7.1.3, pluggy-1.0.0 -- /home/albina/Dev/django_sprint4/venv/bin/python3
+django: settings: blogicum.settings (from ini)
+rootdir: /home/albina/Dev/django_sprint4, configfile: pytest.ini, testpaths: tests/
+plugins: Faker-12.0.1, django-4.5.2
+collecting ... collected 25 items
+
+tests/test_content.py::TestContent::test_unpublished PASSED              [  4%]
+tests/test_content.py::TestContent::test_only_own_pubs_in_category PASSED [  8%]
+tests/test_content.py::TestContent::test_only_own_pubs_in_profile PASSED [ 12%]
+tests/test_content.py::TestContent::test_unpublished_category PASSED     [ 16%]
+tests/test_content.py::TestContent::test_future_posts PASSED             [ 20%]
+tests/test_content.py::TestContent::test_pagination PASSED               [ 24%]
+tests/test_content.py::TestContent::test_image_visible PASSED            [ 28%]
+tests/test_err_pages.py::test_custom_err_handlers PASSED                 [ 32%]
+tests/test_users.py::test_custom_err_handlers PASSED                     [ 36%]
+tests/test_users.py::test_profile PASSED                                 [ 40%]
+tests/test_comment.py::test_comment_created_at PASSED                    [ 44%]
+tests/test_comment.py::test_comment ERROR                                [ 48%]
+tests/test_comment.py::test_404_on_comment_deleted_post ERROR            [ 52%]
+tests/test_post.py::test_post_created_at PASSED                          [ 56%]
+tests/test_post.py::test_post FAILED                                     [ 60%]
+tests/test_comment.py::TestCommentModelAttrs::test_model_attrs[`post` field] <- tests/conftest.py PASSED [ 64%]
+tests/test_comment.py::TestCommentModelAttrs::test_model_attrs[`author` field] <- tests/conftest.py PASSED [ 68%]
+tests/test_comment.py::TestCommentModelAttrs::test_model_attrs[`text` field] <- tests/conftest.py PASSED [ 72%]
+tests/test_comment.py::TestCommentModelAttrs::test_model_attrs[`created_at` field] <- tests/conftest.py PASSED [ 76%]
+tests/test_emails.py::test_gitignore PASSED                              [ 80%]
+tests/test_emails.py::test_email_backend_settings PASSED                 [ 84%]
+tests/test_err_pages.py::test_csrf_failure_view PASSED                   [ 88%]
+tests/test_post.py::TestPostModelAttrs::test_model_attrs[`image` field] <- tests/conftest.py PASSED [ 92%]
+tests/test_post.py::TestPostModelAttrs::test_model_attrs[`pub_date` field] <- tests/conftest.py PASSED [ 96%]
+tests/test_static_pages.py::test_static_pages_as_cbv PASSED              [100%]
+
+==================================== ERRORS ====================================
+________________________ ERROR at setup of test_comment ________________________
+
+user_client = <django.test.client.Client object at 0x7fea228a3730>
+post_with_published_location = <Post: From Able Box Here Own Raise>
+
+    @pytest.fixture
+    def post_comment_context_form_item(
+        user_client: Client, post_with_published_location
+    ) -> Tuple[str, BaseForm]:
+>       response = get_a_post_get_response_safely(
+            user_client, post_with_published_location.id
+        )
+
+tests/fixtures/posts.py:115: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/conftest.py:263: in get_a_post_get_response_safely
+    return get_get_response_safely(
+tests/conftest.py:254: in get_get_response_safely
+    response = user_client.get(url)
+venv/lib/python3.10/site-packages/django/test/client.py:742: in get
+    response = super().get(path, data=data, secure=secure, **extra)
+venv/lib/python3.10/site-packages/django/test/client.py:396: in get
+    return self.generic('GET', path, secure=secure, **{
+venv/lib/python3.10/site-packages/django/test/client.py:473: in generic
+    return self.request(**r)
+venv/lib/python3.10/site-packages/django/test/client.py:719: in request
+    self.check_exception(response)
+venv/lib/python3.10/site-packages/django/test/client.py:580: in check_exception
+    raise exc_value
+venv/lib/python3.10/site-packages/django/core/handlers/exception.py:47: in inner
+    response = get_response(request)
+venv/lib/python3.10/site-packages/django/core/handlers/base.py:204: in _get_response
+    response = response.render()
+venv/lib/python3.10/site-packages/django/template/response.py:105: in render
+    self.content = self.rendered_content
+venv/lib/python3.10/site-packages/django/template/response.py:83: in rendered_content
+    return template.render(context, self._request)
+venv/lib/python3.10/site-packages/django/template/backends/django.py:61: in render
+    return self.template.render(context)
+venv/lib/python3.10/site-packages/django/template/base.py:170: in render
+    return self._render(context)
+venv/lib/python3.10/site-packages/django/test/utils.py:100: in instrumented_test_render
+    return self.nodelist.render(context)
+venv/lib/python3.10/site-packages/django/template/base.py:938: in render
+    bit = node.render_annotated(context)
+venv/lib/python3.10/site-packages/django/template/base.py:905: in render_annotated
+    return self.render(context)
+venv/lib/python3.10/site-packages/django/template/loader_tags.py:150: in render
+    return compiled_parent._render(context)
+venv/lib/python3.10/site-packages/django/test/utils.py:100: in instrumented_test_render
+    return self.nodelist.render(context)
+venv/lib/python3.10/site-packages/django/template/base.py:938: in render
+    bit = node.render_annotated(context)
+venv/lib/python3.10/site-packages/django/template/base.py:905: in render_annotated
+    return self.render(context)
+venv/lib/python3.10/site-packages/django/template/loader_tags.py:62: in render
+    result = block.nodelist.render(context)
+venv/lib/python3.10/site-packages/django/template/base.py:938: in render
+    bit = node.render_annotated(context)
+venv/lib/python3.10/site-packages/django/template/base.py:905: in render_annotated
+    return self.render(context)
+venv/lib/python3.10/site-packages/django/template/loader_tags.py:195: in render
+    return template.render(context)
+venv/lib/python3.10/site-packages/django/template/base.py:172: in render
+    return self._render(context)
+venv/lib/python3.10/site-packages/django/test/utils.py:100: in instrumented_test_render
+    return self.nodelist.render(context)
+venv/lib/python3.10/site-packages/django/template/base.py:938: in render
+    bit = node.render_annotated(context)
+venv/lib/python3.10/site-packages/django/template/base.py:905: in render_annotated
+    return self.render(context)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <ForNode: for comment in comments, tail_len: 13>
+context = [{'True': True, 'False': False, 'None': None}, {}, {}, {'paginator': <django.core.paginator.Paginator object at 0x7fea...28a19f0>, 'post': <Post: From Able Box Here Own Raise>, 'form': <CommentForm bound=False, valid=False, fields=(text)>}]
+
+    def render(self, context):
+        if 'forloop' in context:
+            parentloop = context['forloop']
+        else:
+            parentloop = {}
+        with context.push():
+            values = self.sequence.resolve(context, ignore_failures=True)
+            if values is None:
+                values = []
+            if not hasattr(values, '__len__'):
+>               values = list(values)
+E               TypeError: 'Post' object is not iterable
+
+venv/lib/python3.10/site-packages/django/template/defaulttags.py:170: TypeError
+______________ ERROR at setup of test_404_on_comment_deleted_post ______________
+
+user_client = <django.test.client.Client object at 0x7fea22c9ba60>
+post_with_published_location = <Post: Now Win Pretty Dog Door Support>
+
+    @pytest.fixture
+    def post_comment_context_form_item(
+        user_client: Client, post_with_published_location
+    ) -> Tuple[str, BaseForm]:
+>       response = get_a_post_get_response_safely(
+            user_client, post_with_published_location.id
+        )
+
+tests/fixtures/posts.py:115: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/conftest.py:263: in get_a_post_get_response_safely
+    return get_get_response_safely(
+tests/conftest.py:254: in get_get_response_safely
+    response = user_client.get(url)
+venv/lib/python3.10/site-packages/django/test/client.py:742: in get
+    response = super().get(path, data=data, secure=secure, **extra)
+venv/lib/python3.10/site-packages/django/test/client.py:396: in get
+    return self.generic('GET', path, secure=secure, **{
+venv/lib/python3.10/site-packages/django/test/client.py:473: in generic
+    return self.request(**r)
+venv/lib/python3.10/site-packages/django/test/client.py:719: in request
+    self.check_exception(response)
+venv/lib/python3.10/site-packages/django/test/client.py:580: in check_exception
+    raise exc_value
+venv/lib/python3.10/site-packages/django/core/handlers/exception.py:47: in inner
+    response = get_response(request)
+venv/lib/python3.10/site-packages/django/core/handlers/base.py:204: in _get_response
+    response = response.render()
+venv/lib/python3.10/site-packages/django/template/response.py:105: in render
+    self.content = self.rendered_content
+venv/lib/python3.10/site-packages/django/template/response.py:83: in rendered_content
+    return template.render(context, self._request)
+venv/lib/python3.10/site-packages/django/template/backends/django.py:61: in render
+    return self.template.render(context)
+venv/lib/python3.10/site-packages/django/template/base.py:170: in render
+    return self._render(context)
+venv/lib/python3.10/site-packages/django/test/utils.py:100: in instrumented_test_render
+    return self.nodelist.render(context)
+venv/lib/python3.10/site-packages/django/template/base.py:938: in render
+    bit = node.render_annotated(context)
+venv/lib/python3.10/site-packages/django/template/base.py:905: in render_annotated
+    return self.render(context)
+venv/lib/python3.10/site-packages/django/template/loader_tags.py:150: in render
+    return compiled_parent._render(context)
+venv/lib/python3.10/site-packages/django/test/utils.py:100: in instrumented_test_render
+    return self.nodelist.render(context)
+venv/lib/python3.10/site-packages/django/template/base.py:938: in render
+    bit = node.render_annotated(context)
+venv/lib/python3.10/site-packages/django/template/base.py:905: in render_annotated
+    return self.render(context)
+venv/lib/python3.10/site-packages/django/template/loader_tags.py:62: in render
+    result = block.nodelist.render(context)
+venv/lib/python3.10/site-packages/django/template/base.py:938: in render
+    bit = node.render_annotated(context)
+venv/lib/python3.10/site-packages/django/template/base.py:905: in render_annotated
+    return self.render(context)
+venv/lib/python3.10/site-packages/django/template/loader_tags.py:195: in render
+    return template.render(context)
+venv/lib/python3.10/site-packages/django/template/base.py:172: in render
+    return self._render(context)
+venv/lib/python3.10/site-packages/django/test/utils.py:100: in instrumented_test_render
+    return self.nodelist.render(context)
+venv/lib/python3.10/site-packages/django/template/base.py:938: in render
+    bit = node.render_annotated(context)
+venv/lib/python3.10/site-packages/django/template/base.py:905: in render_annotated
+    return self.render(context)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <ForNode: for comment in comments, tail_len: 13>
+context = [{'True': True, 'False': False, 'None': None}, {}, {}, {'paginator': <django.core.paginator.Paginator object at 0x7fea...1ff0>, 'post': <Post: Now Win Pretty Dog Door Support>, 'form': <CommentForm bound=False, valid=False, fields=(text)>}]
+
+    def render(self, context):
+        if 'forloop' in context:
+            parentloop = context['forloop']
+        else:
+            parentloop = {}
+        with context.push():
+            values = self.sequence.resolve(context, ignore_failures=True)
+            if values is None:
+                values = []
+            if not hasattr(values, '__len__'):
+>               values = list(values)
+E               TypeError: 'Post' object is not iterable
+
+venv/lib/python3.10/site-packages/django/template/defaulttags.py:170: TypeError
+=================================== FAILURES ===================================
+__________________________________ test_post ___________________________________
+
+published_category = <Category: Maybe Focus Many Protect Society Program>
+published_location = <Location: Kerri Ho DVM>
+user_client = <django.test.client.Client object at 0x7fea2246df00>
+another_user_client = <django.test.client.Client object at 0x7fea2246cc10>
+unlogged_client = <django.test.client.Client object at 0x7fea2246e800>
+comment_to_a_post = <Comment: Executive always and reveal church. Anything heart employee pick represent media when. Word dream however moment movement enough claim company.>
+create_post_context_form_item = KeyVal(key='form', val=<PostForm bound=False, valid=False, fields=(title;text;pub_date;location;category;image)>)
+PostModel = <class 'blog.models.Post'>
+CommentModelAdapter = <class 'adapters.comment.CommentModelAdapter.<locals>._CommentModelAdapter'>
+main_content_tester = <test_content.MainPostContentTester object at 0x7fea22b46380>
+
+    @pytest.mark.django_db(transaction=True)
+    def test_post(
+            published_category: Model,
+            published_location: Model,
+            user_client: django.test.Client,
+            another_user_client: django.test.Client,
+            unlogged_client: django.test.Client,
+            comment_to_a_post: Model,
+            create_post_context_form_item: Tuple[str, BaseForm],
+            PostModel: Type[Model],
+            CommentModelAdapter: CommentModelAdapterT,
+            main_content_tester: MainPostContentTester
+    ):
+        _, ctx_form = create_post_context_form_item
+    
+        create_a_post_get_response = get_create_a_post_get_response_safely(
+            user_client
+        )
+    
+        response_on_created, created_items = _test_create_items(
+            PostModel,
+            PostModelAdapter,
+            another_user_client,
+            create_a_post_get_response,
+            ctx_form,
+            published_category,
+            published_location,
+            unlogged_client,
+            user_client,
+        )
+    
+        # checking images are visible on post creation
+        created_content = response_on_created.content.decode('utf-8')
+        img_count = created_content.count('<img')
+        expected_img_count = main_content_tester.n_or_page_size(len(created_items))
+        assert img_count >= expected_img_count, (
+            'Убедитесь, что при создании публикации она отображается с картинкой.'
+        )
+    
+>       edit_response, edit_url, del_url = _test_edit_post(
+            CommentModelAdapter,
+            another_user_client,
+            comment_to_a_post,
+            unlogged_client=unlogged_client,
+            user_client=user_client,
+        )
+
+tests/test_post.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_post.py:335: in _test_edit_post
+    response_on_commented = user_client.get(post_url)
+venv/lib/python3.10/site-packages/django/test/client.py:742: in get
+    response = super().get(path, data=data, secure=secure, **extra)
+venv/lib/python3.10/site-packages/django/test/client.py:396: in get
+    return self.generic('GET', path, secure=secure, **{
+venv/lib/python3.10/site-packages/django/test/client.py:473: in generic
+    return self.request(**r)
+venv/lib/python3.10/site-packages/django/test/client.py:719: in request
+    self.check_exception(response)
+venv/lib/python3.10/site-packages/django/test/client.py:580: in check_exception
+    raise exc_value
+venv/lib/python3.10/site-packages/django/core/handlers/exception.py:47: in inner
+    response = get_response(request)
+venv/lib/python3.10/site-packages/django/core/handlers/base.py:204: in _get_response
+    response = response.render()
+venv/lib/python3.10/site-packages/django/template/response.py:105: in render
+    self.content = self.rendered_content
+venv/lib/python3.10/site-packages/django/template/response.py:83: in rendered_content
+    return template.render(context, self._request)
+venv/lib/python3.10/site-packages/django/template/backends/django.py:61: in render
+    return self.template.render(context)
+venv/lib/python3.10/site-packages/django/template/base.py:170: in render
+    return self._render(context)
+venv/lib/python3.10/site-packages/django/test/utils.py:100: in instrumented_test_render
+    return self.nodelist.render(context)
+venv/lib/python3.10/site-packages/django/template/base.py:938: in render
+    bit = node.render_annotated(context)
+venv/lib/python3.10/site-packages/django/template/base.py:905: in render_annotated
+    return self.render(context)
+venv/lib/python3.10/site-packages/django/template/loader_tags.py:150: in render
+    return compiled_parent._render(context)
+venv/lib/python3.10/site-packages/django/test/utils.py:100: in instrumented_test_render
+    return self.nodelist.render(context)
+venv/lib/python3.10/site-packages/django/template/base.py:938: in render
+    bit = node.render_annotated(context)
+venv/lib/python3.10/site-packages/django/template/base.py:905: in render_annotated
+    return self.render(context)
+venv/lib/python3.10/site-packages/django/template/loader_tags.py:62: in render
+    result = block.nodelist.render(context)
+venv/lib/python3.10/site-packages/django/template/base.py:938: in render
+    bit = node.render_annotated(context)
+venv/lib/python3.10/site-packages/django/template/base.py:905: in render_annotated
+    return self.render(context)
+venv/lib/python3.10/site-packages/django/template/loader_tags.py:195: in render
+    return template.render(context)
+venv/lib/python3.10/site-packages/django/template/base.py:172: in render
+    return self._render(context)
+venv/lib/python3.10/site-packages/django/test/utils.py:100: in instrumented_test_render
+    return self.nodelist.render(context)
+venv/lib/python3.10/site-packages/django/template/base.py:938: in render
+    bit = node.render_annotated(context)
+venv/lib/python3.10/site-packages/django/template/base.py:905: in render_annotated
+    return self.render(context)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <ForNode: for comment in comments, tail_len: 13>
+context = [{'True': True, 'False': False, 'None': None}, {}, {}, {'paginator': <django.core.paginator.Paginator object at 0x7fea...ost': <Post: Expert Matter Writer Forward Memory When>, 'form': <CommentForm bound=False, valid=False, fields=(text)>}]
+
+    def render(self, context):
+        if 'forloop' in context:
+            parentloop = context['forloop']
+        else:
+            parentloop = {}
+        with context.push():
+            values = self.sequence.resolve(context, ignore_failures=True)
+            if values is None:
+                values = []
+            if not hasattr(values, '__len__'):
+>               values = list(values)
+E               TypeError: 'Post' object is not iterable
+
+venv/lib/python3.10/site-packages/django/template/defaulttags.py:170: TypeError
+=========================== short test summary info ============================
+ERROR tests/test_comment.py::test_comment - TypeError: 'Post' object is not i...
+ERROR tests/test_comment.py::test_404_on_comment_deleted_post - TypeError: 'P...
+============= 1 failed, 22 passed, 23 warnings, 2 errors in 3.09s ==============

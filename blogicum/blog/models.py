@@ -1,14 +1,19 @@
-from django.contrib.auth import get_user_model
-from django.db import models
-from django.urls import reverse
+from django.db import models  # type: ignore
+from django.urls import reverse  # type: ignore
+from django.contrib.auth import get_user_model  # type: ignore
+
+from .querysets import CustomQuerySet
+
 
 User = get_user_model()
 
 
-class PublishedModel(models.Model):
+class BaseModel(models.Model):
     """
-    Абстрактная модель.
-    Добавляет для публикаций флаг и дату создания.
+    Базовая модель.
+
+    is_published - флаг Опубликовано.
+    created_at - дата создания записи в БД.
     """
 
     is_published = models.BooleanField(
@@ -16,138 +21,132 @@ class PublishedModel(models.Model):
         verbose_name='Опубликовано',
         help_text='Снимите галочку, чтобы скрыть публикацию.',
     )
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name='Добавлено',
-    )
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      verbose_name='Добавлено')
 
     class Meta:
         abstract = True
 
 
-class Location(PublishedModel):
-    """Модель локации для публикаций."""
+class Category(BaseModel):
+    """
+    Категория поста.
 
-    name = models.CharField(
-        max_length=256,
-        verbose_name='Название места',
-    )
+    title - название категории.
+    description - описание категории.
+    slug - слаг категории.
+    """
 
-    class Meta:
-        verbose_name = 'местоположение'
-        verbose_name_plural = 'Местоположения'
-
-    def __str__(self) -> str:
-        return self.name[:25]
-
-
-class Category(PublishedModel):
-    """Модель категории для публикаций."""
-
-    title = models.CharField(
-        max_length=256,
-        verbose_name='Заголовок',
-    )
-    description = models.TextField(
-        verbose_name='Описание',
-    )
+    title = models.CharField(max_length=256, verbose_name='Заголовок')
+    description = models.TextField(verbose_name='Описание')
     slug = models.SlugField(
         unique=True,
         verbose_name='Идентификатор',
-        help_text=(
-            'Идентификатор страницы для URL; '
-            'разрешены символы латиницы, цифры, дефис и подчёркивание.'
-        ),
+        help_text=('Идентификатор страницы для URL; разрешены символы '
+                   'латиницы, цифры, дефис и подчёркивание.'),
     )
 
     class Meta:
         verbose_name = 'категория'
         verbose_name_plural = 'Категории'
 
-    def __str__(self) -> str:
-        return f'"{self.title[:25]}" - {self.description[:50]}...'
+    def __str__(self):
+        return self.title
 
 
-class Post(PublishedModel):
-    """Модель публикации."""
+class Location(BaseModel):
+    """
+    Место, связанное с постом.
 
-    title = models.CharField(
-        max_length=256,
-        verbose_name='Заголовок',
-    )
-    text = models.TextField(
-        verbose_name='Текст',
-    )
-    image = models.ImageField(
-        verbose_name='Фото',
-        upload_to='post_images/',
-        blank=True,
-    )
+    name - название места.
+    """
+
+    name = models.CharField(max_length=256, verbose_name='Название места')
+
+    class Meta:
+        verbose_name = 'местоположение'
+        verbose_name_plural = 'Местоположения'
+
+    def __str__(self):
+        return self.name
+
+
+class Post(BaseModel):
+    """
+    Модель поста.
+
+    title - название поста.
+    text - текст поста.
+    pub_date - дата публикации.
+    author - автор поста.
+    location - связанное место.
+    category - категория поста.
+    """
+
+    title = models.CharField(max_length=256, verbose_name='Заголовок')
+    text = models.TextField(verbose_name='Текст')
     pub_date = models.DateTimeField(
         verbose_name='Дата и время публикации',
-        help_text=(
-            'Если установить дату и время в будущем — '
-            'можно делать отложенные публикации.'
-        ),
+        help_text=('Если установить дату и время в будущем — можно '
+                   'делать отложенные публикации.'),
     )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         verbose_name='Автор публикации',
-        related_name='posts',
+        related_name='posts_for_author',
     )
     location = models.ForeignKey(
         Location,
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
+        related_name='posts_for_location',
         verbose_name='Местоположение',
-        related_name='posts',
     )
     category = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
         null=True,
+        related_name='posts_for_category',
         verbose_name='Категория',
-        related_name='posts',
     )
+    image = models.ImageField('Фото', upload_to='post_images', blank=True)
+    objects = CustomQuerySet.as_manager()
 
     class Meta:
         verbose_name = 'публикация'
         verbose_name_plural = 'Публикации'
-        ordering = ('-pub_date', 'title',)
+        ordering = ('-pub_date', 'title')
 
-    def get_absolute_url(self) -> str:
-        return reverse('blog:post_detail', kwargs={'pk': self.pk})
+    def __str__(self):
+        return self.title
 
-    def __str__(self) -> str:
-        return (
-            f"{self.pub_date:%Y.%m.%d %H:%M} | {self.author}: "
-            f'"{self.title[:25]}" {self.text[:50]}'
-        )
+    def get_absolute_url(self):
+        return reverse('blog:post_detail', kwargs={'post_id': self.pk})
 
 
-class Comment(PublishedModel):
-    """Модель комментария для публикации."""
+class Comment(BaseModel):
+    """Комментарии к постам."""
 
-    text = models.TextField(
-        verbose_name='Текст комментария',
-    )
+    text = models.TextField(verbose_name='Текст')
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        verbose_name='Автор комментария',
+        related_name='comments_for_author',
     )
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
-
-        related_name='comments',
+        verbose_name='Публикация',
+        related_name='comments_for_post',
     )
 
     class Meta:
         verbose_name = 'комментарий'
         verbose_name_plural = 'Комментарии'
-        ordering = ('created_at',)
+        ordering = ('created_at', 'text')
 
-    def __str__(self) -> str:
-        return f'{self.author}: {self.text[:50]}'
+    def __str__(self):
+        return self.text

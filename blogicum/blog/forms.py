@@ -1,38 +1,39 @@
-from django import forms
+from django import forms  # type: ignore
+from django.contrib.auth import get_user_model  # type: ignore
+
 from .models import Comment, Post
+
+User = get_user_model()
 
 
 class PostForm(forms.ModelForm):
-    """Форма для добавления постов."""
+    """Форма создания и редактирования публикации."""
 
     class Meta:
         model = Post
-        exclude = (
-            'author',
-            'is_published',
-        )
+        exclude = ('author', 'comment_count', 'is_published')
         widgets = {
             'pub_date': forms.DateTimeInput(
-                format='%Y-%m-%dT%H:%M',
-                attrs={'type': 'datetime-local'}
-            ),
+                format=('%d.%m.%Y %H:%M'),
+                attrs={'type': 'datetime'}),
         }
 
+
 class CommentForm(forms.ModelForm):
-    """Форма для добавления комментариев."""
+    """Форма создания и редактирования комментария."""
 
     class Meta:
         model = Comment
-        fields = ('text',)
-        widgets = {
-            'text': forms.Textarea(
-                attrs={'rows': '5'}
-            )
-        }
+        exclude = ('author', 'post', 'is_published')
 
-class CreatePostForm(forms.ModelForm):
-    """Форма для создания поста."""
+
+class ProfileForm(forms.ModelForm):
+    """Форма создания и редактирования профиля."""
 
     class Meta:
-        model = Post
-        fields = '__all__'  # или выберите конкретные поля для формы
+        model = User
+        exclude = ('is_staff', 'groups',
+                   'user_permissions',
+                   'is_active', 'is_superuser',
+                   'last_login', 'date_joined',
+                   'username', 'password')
